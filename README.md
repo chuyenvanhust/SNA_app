@@ -1,4 +1,4 @@
-# appv1
+# Silent network authentication app
 
 A new Flutter project.
 
