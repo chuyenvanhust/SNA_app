@@ -210,7 +210,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                   ),
                   const Text(
                     'Sign in with your credentials or use SNA',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                    style: TextStyle(fontSize: 17, color: Colors.grey),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 25),
