@@ -134,6 +134,82 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     }
   }
 
+  /// Handle Forgot Password action
+  Future<void> _handleForgotPassword() async {
+    // TODO: Implement forgot password flow
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.lock_reset, color: Color(0xFFE60012), size: 28),
+              SizedBox(width: 12),
+              Text('Forgot Password'),
+            ],
+          ),
+          content: const Text(
+            'Password reset functionality will be implemented soon.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Color(0xFFE60012),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Handle Register action
+  Future<void> _handleRegister() async {
+    // TODO: Navigate to registration screen
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.person_add, color: Color(0xFFE60012), size: 28),
+              SizedBox(width: 12),
+              Text('Register'),
+            ],
+          ),
+          content: const Text(
+            'Registration functionality will be implemented soon.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Color(0xFFE60012),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   /// Show error dialog to user
   void _showErrorDialog(String message) {
     showDialog(
@@ -325,7 +401,37 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 24),
+                  // const SizedBox(height: 12),
+
+                  // Forgot Password and Register Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed: _isLoading ? null : _handleForgotPassword,
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            color: Color(0xFFE60012),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _isLoading ? null : _handleRegister,
+                        child: const Text(
+                          'Register',
+                          style: TextStyle(
+                            color: Color(0xFFE60012),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
 
                   // Sign In Button (Traditional)
                   SizedBox(
