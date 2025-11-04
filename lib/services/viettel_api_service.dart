@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:io';
 import '../models/api_responses.dart';
 import 'debug_log_service.dart';
+import 'vonage_cellular_service.dart';
 
 /// Service to handle Viettel Number Verification API calls
+/// Now using Vonage Client Library for cellular network requests
 class ViettelApiService {
   final DebugLogService _debugLog = DebugLogService();
+  final VonageCellularService _vonageService = VonageCellularService();
   static const String baseUrl = 'https://developers-api.viettel.vn';
 
   // API Configuration
@@ -15,8 +18,74 @@ class ViettelApiService {
   static const String customerName = 'Bank1';
   static const String correlator = '123-456-789';
 
-  /// Make a POST request using dart:io HttpClient to handle malformed headers
+  /// Make a POST request using Vonage cellular network for number verification
   Future<Map<String, dynamic>> _makePostRequest(
+    String urlString,
+    Map<String, String> headers,
+    String body,
+  ) async {
+    // Log request
+    _debugLog.logRequest(urlString, headers, body.isEmpty ? null : body);
+
+    try {
+      // Use Vonage POST method via reflection to access internal API
+      final response = await _vonageService.makeCellularPostRequest(
+        url: urlString,
+        headers: headers,
+        body: body,
+        debug: false,
+      );
+
+      print('Vonage Response: $response');
+
+      // Check if request was successful
+      if (_vonageService.isSuccessResponse(response)) {
+        final httpStatus = response['http_status'] as int;
+        final responseBody = _vonageService.parseResponseBody(response);
+
+        print('Response status: $httpStatus');
+        print('Response body: $responseBody');
+
+        // Log response
+        _debugLog.logResponse(
+          urlString,
+          httpStatus,
+          responseBody?.toString() ?? '',
+        );
+
+        if (httpStatus == 200 || httpStatus == 201) {
+          return responseBody ?? {};
+        } else {
+          _debugLog.logError('API Error: $httpStatus', responseBody);
+          throw Exception('API Error: $httpStatus - $responseBody');
+        }
+      } else {
+        // Handle Vonage SDK errors
+        final errorMessage = _vonageService.getErrorMessage(response);
+        print('Vonage Error: $errorMessage');
+        _debugLog.logError('Cellular request failed', errorMessage);
+
+        // Try fallback to regular HTTP if cellular fails
+        print('Attempting fallback to regular HTTP...');
+        return await _makeFallbackPostRequest(urlString, headers, body);
+      }
+    } catch (e) {
+      print('Request error: $e');
+      _debugLog.logError('Request failed', e);
+
+      // Try fallback to regular HTTP on any error
+      try {
+        print('Attempting fallback to regular HTTP...');
+        return await _makeFallbackPostRequest(urlString, headers, body);
+      } catch (fallbackError) {
+        print('Fallback also failed: $fallbackError');
+        rethrow;
+      }
+    }
+  }
+
+  /// Fallback POST request using dart:io HttpClient
+  Future<Map<String, dynamic>> _makeFallbackPostRequest(
     String urlString,
     Map<String, String> headers,
     String body,
@@ -24,8 +93,7 @@ class ViettelApiService {
     final uri = Uri.parse(urlString);
     final client = HttpClient();
 
-    // Log request
-    _debugLog.logRequest(urlString, headers, body.isEmpty ? null : body);
+    _debugLog.logInfo('Using fallback HTTP request...');
 
     try {
       final request = await client.postUrl(uri);
@@ -42,8 +110,8 @@ class ViettelApiService {
       final response = await request.close();
       final responseBody = await response.transform(utf8.decoder).join();
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: $responseBody');
+      print('Fallback Response status: ${response.statusCode}');
+      print('Fallback Response body: $responseBody');
 
       // Log response
       _debugLog.logResponse(urlString, response.statusCode, responseBody);
@@ -55,8 +123,8 @@ class ViettelApiService {
         throw Exception('API Error: ${response.statusCode} - $responseBody');
       }
     } catch (e) {
-      print('Request error: $e');
-      _debugLog.logError('Request failed', e);
+      print('Fallback request error: $e');
+      _debugLog.logError('Fallback request failed', e);
       rethrow;
     } finally {
       client.close();
@@ -202,16 +270,13 @@ class ViettelApiService {
 
     final body = json.encode({'phoneNumber': formattedPhone});
 
-    final jsonResponse = await _makePostRequest(
-      '$baseUrl/number-verification/v0/verify',
-      {
-        'Authorization': 'Bearer $jwt',
-        'customerName': customerName,
-        'x-correlator': correlator,
-        'Content-Type': 'application/json',
-      },
-      body,
-    );
+    final jsonResponse =
+        await _makePostRequest('$baseUrl/number-verification/v0/verify', {
+          'Authorization': 'Bearer $jwt',
+          'customerName': customerName,
+          'x-correlator': correlator,
+          'Content-Type': 'application/json',
+        }, body);
 
     return PhoneVerificationResponse.fromJson(jsonResponse);
   }

@@ -42,3 +42,8 @@ android {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // Vonage Client Library for cellular network requests
+    implementation("com.vonage:client-library:1.0.1")
+}
