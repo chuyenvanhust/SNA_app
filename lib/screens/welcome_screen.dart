@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/debug_terminal.dart';
 
-/// Super App Home Screen with multiple services and options
 class WelcomeScreen extends StatelessWidget {
   final String phoneNumber;
 
@@ -318,64 +317,6 @@ class WelcomeScreen extends StatelessWidget {
 
             const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-            // // More Services
-            // SliverToBoxAdapter(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            //     child: Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         const Text(
-            //           'More Services',
-            //           style: TextStyle(
-            //             fontSize: 18,
-            //             fontWeight: FontWeight.bold,
-            //             color: Colors.black87,
-            //           ),
-            //         ),
-            //         const SizedBox(height: 12),
-            //         _buildListTile(
-            //           icon: Icons.flight,
-            //           title: 'Flight Booking',
-            //           subtitle: 'Book domestic & international flights',
-            //           color: const Color(0xFF00BCD4),
-            //           onTap: () {},
-            //         ),
-            //         _buildListTile(
-            //           icon: Icons.hotel,
-            //           title: 'Hotel Booking',
-            //           subtitle: 'Find and book hotels worldwide',
-            //           color: const Color(0xFFFF9800),
-            //           onTap: () {},
-            //         ),
-            //         _buildListTile(
-            //           icon: Icons.local_taxi,
-            //           title: 'Transportation',
-            //           subtitle: 'Book taxi, ride-sharing & more',
-            //           color: const Color(0xFF4CAF50),
-            //           onTap: () {},
-            //         ),
-            //         _buildListTile(
-            //           icon: Icons.restaurant,
-            //           title: 'Food Delivery',
-            //           subtitle: 'Order food from your favorite restaurants',
-            //           color: const Color(0xFFE60012),
-            //           onTap: () {},
-            //         ),
-            //         _buildListTile(
-            //           icon: Icons.movie,
-            //           title: 'Entertainment',
-            //           subtitle: 'Movies, games, and event tickets',
-            //           color: const Color(0xFF9C27B0),
-            //           onTap: () {},
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-
-            // const SliverToBoxAdapter(child: SizedBox(height: 24)),
-
             // Logout Button
             SliverToBoxAdapter(
               child: Padding(
@@ -491,54 +432,6 @@ class WelcomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildListTile({
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        onTap: onTap,
-        leading: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: color, size: 24),
-        ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-        ),
-        subtitle: Text(
-          subtitle,
-          style: const TextStyle(fontSize: 12, color: Colors.grey),
-        ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey,
         ),
       ),
     );

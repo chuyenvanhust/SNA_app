@@ -20,10 +20,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
   bool _isLoading = false;
   bool _obscurePassword = true;
-  // Used for debugging/tracking API flow steps (can be displayed in UI if needed)
-  // ignore: unused_field
-  String _currentStep = '';
-
   @override
   void dispose() {
     _phoneController.dispose();
@@ -36,7 +32,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
-        _currentStep = 'Signing in...';
       });
 
       String phoneNumber = _phoneController.text;
@@ -46,16 +41,14 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
       print('Traditional sign in for phone: $phoneNumber');
 
       try {
-        // TODO: Implement traditional authentication API call here
-        // This would typically call a different endpoint that requires password
-        await Future.delayed(const Duration(seconds: 2)); // Simulated API call
+        // TODO: Implement traditional authentication API call
+        await Future.delayed(const Duration(seconds: 2));
 
         setState(() {
           _isLoading = false;
-          _currentStep = '';
         });
 
-        // For now, show success (replace with actual API logic)
+        // show success (replace with actual API logic)
         if (mounted) {
           _showErrorDialog(
             'Traditional sign in with password is not implemented yet. Please use "Sign In with SNA".',
@@ -64,7 +57,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
       } catch (e) {
         setState(() {
           _isLoading = false;
-          _currentStep = '';
         });
 
         if (mounted) {
@@ -74,7 +66,7 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     }
   }
 
-  /// Handle Silent Network Authentication (SNA) - no password required
+  /// Handle Silent Network Authentication (SNA)
   Future<void> _handleSignInWithSNA() async {
     // Only validate phone number for SNA
     if (_phoneController.text.isEmpty || _phoneController.text.length < 9) {
@@ -84,7 +76,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
     setState(() {
       _isLoading = true;
-      _currentStep = 'Initializing SNA...';
     });
 
     String phoneNumber = _phoneController.text;
@@ -92,7 +83,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
     try {
       // Update UI with each step
-      setState(() => _currentStep = 'Step 1: Getting authorization...');
       await Future.delayed(const Duration(milliseconds: 500));
 
       // Call the 3-step API flow for SNA
@@ -100,7 +90,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
       setState(() {
         _isLoading = false;
-        _currentStep = '';
       });
 
       if (result.success && result.data?.devicePhoneNumberVerified == true) {
@@ -125,7 +114,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
     } catch (e) {
       setState(() {
         _isLoading = false;
-        _currentStep = '';
       });
 
       if (mounted) {
@@ -470,36 +458,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                   ),
                   const SizedBox(height: 10),
 
-                  // // Divider with "OR"
-                  // Row(
-                  //   children: [
-                  //     Expanded(
-                  //       child: Divider(
-                  //         color: Colors.grey.shade400,
-                  //         thickness: 1,
-                  //       ),
-                  //     ),
-                  //     Padding(
-                  //       padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //       child: Text(
-                  //         'OR',
-                  //         style: TextStyle(
-                  //           color: Colors.grey.shade600,
-                  //           fontWeight: FontWeight.w500,
-                  //           fontSize: 14,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Divider(
-                  //         color: Colors.grey.shade400,
-                  //         thickness: 1,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // const SizedBox(height: 20),
-
                   // Sign In with SNA Button
                   SizedBox(
                     width: double.infinity,
@@ -560,30 +518,6 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-
-                  // // Loading Status
-                  // if (_isLoading)
-                  //   Column(
-                  //     children: [
-                  //       Text(
-                  //         _currentStep,
-                  //         style: TextStyle(
-                  //           fontSize: 14,
-                  //           color: Colors.grey.shade600,
-                  //           fontStyle: FontStyle.italic,
-                  //         ),
-                  //         textAlign: TextAlign.center,
-                  //       ),
-                  //       const SizedBox(height: 8),
-                  //       LinearProgressIndicator(
-                  //         backgroundColor: Colors.grey.shade200,
-                  //         valueColor: const AlwaysStoppedAnimation<Color>(
-                  //           Color(0xFFE60012),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
