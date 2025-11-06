@@ -16,7 +16,7 @@ class WelcomeScreen extends StatelessWidget {
           slivers: [
             // Custom App Bar with gradient
             SliverAppBar(
-              expandedHeight: 180,
+              expandedHeight: 200,
               floating: false,
               pinned: true,
               backgroundColor: const Color(0xFFE60012),
@@ -30,7 +30,7 @@ class WelcomeScreen extends StatelessWidget {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 20),
+                    padding: const EdgeInsets.fromLTRB(20, 50, 20, 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
