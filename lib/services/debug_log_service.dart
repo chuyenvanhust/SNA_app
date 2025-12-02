@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-/// Service to manage debug logs for API requests and responses
 class DebugLogService {
   static final DebugLogService _instance = DebugLogService._internal();
   factory DebugLogService() => _instance;
