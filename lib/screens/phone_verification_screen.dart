@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/viettel_api_service.dart';
@@ -85,8 +87,11 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
       // Update UI with each step
       await Future.delayed(const Duration(milliseconds: 500));
 
-      // Call the 3-step API flow for SNA
-      final result = await _apiService.verifyPhoneNumber(phoneNumber);
+      // Call the 3-step API flow for SNA with a hard 30s timeout so a stuck
+      // cellular connection surfaces a timeout dialog instead of hanging.
+      final result = await _apiService
+          .verifyPhoneNumber(phoneNumber)
+          .timeout(const Duration(seconds: 30));
 
       setState(() {
         _isLoading = false;
@@ -110,6 +115,14 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                 : 'The phone number not match with the device',
           );
         }
+      }
+    } on TimeoutException {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (mounted) {
+        _showTimeoutDialog();
       }
     } catch (e) {
       setState(() {
@@ -179,6 +192,44 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
           ),
           content: const Text(
             'Registration functionality will be implemented soon.',
+            style: TextStyle(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text(
+                'OK',
+                style: TextStyle(
+                  color: Color(0xFFE60012),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// Show timeout error dialog to user
+  void _showTimeoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.timer_off, color: Colors.orange, size: 28),
+              SizedBox(width: 12),
+              Expanded(child: Text('Connection Timeout')),
+            ],
+          ),
+          content: const Text(
+            'The verification request timed out after 30 seconds. '
+            'Please check your mobile data connection and try again.',
             style: TextStyle(fontSize: 16),
           ),
           actions: [

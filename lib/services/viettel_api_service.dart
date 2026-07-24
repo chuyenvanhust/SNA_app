@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import '../models/api_responses.dart';
 import 'debug_log_service.dart';
 import 'vonage_cellular_service.dart';
@@ -18,7 +18,11 @@ class ViettelApiService {
   static const String customerName = 'Bank1';
   static const String correlator = '123-456-789';
 
-  /// Make a POST request using Vonage cellular network for number verification
+  /// Make a POST request using Vonage cellular network for number verification.
+  ///
+  /// Number verification (SNA) must travel over the mobile-data path, so there
+  /// is intentionally NO HTTP fallback: a plain HTTP request cannot perform SNA
+  /// and would only delay the error by another 30s timeout cycle.
   Future<Map<String, dynamic>> _makePostRequest(
     String urlString,
     Map<String, String> headers,
@@ -27,108 +31,50 @@ class ViettelApiService {
     // Log request
     _debugLog.logRequest(urlString, headers, body.isEmpty ? null : body);
 
-    try {
-      // Use Vonage POST method via reflection to access internal API
-      final response = await _vonageService.makeCellularPostRequest(
-        url: urlString,
-        headers: headers,
-        body: body,
-        debug: false,
-      );
+    // Use Vonage POST method via reflection to access internal API
+    final response = await _vonageService.makeCellularPostRequest(
+      url: urlString,
+      headers: headers,
+      body: body,
+      debug: false,
+    );
 
-      print('Vonage Response: $response');
+    print('Vonage Response: $response');
 
-      // Check if request was successful
-      if (_vonageService.isSuccessResponse(response)) {
-        final httpStatus = response['http_status'] as int;
-        final responseBody = _vonageService.parseResponseBody(response);
+    // Check if request was successful
+    if (_vonageService.isSuccessResponse(response)) {
+      final httpStatus = response['http_status'] as int;
+      final responseBody = _vonageService.parseResponseBody(response);
 
-        print('Response status: $httpStatus');
-        print('Response body: $responseBody');
-
-        // Log response
-        _debugLog.logResponse(
-          urlString,
-          httpStatus,
-          responseBody?.toString() ?? '',
-        );
-
-        if (httpStatus == 200 || httpStatus == 201) {
-          return responseBody ?? {};
-        } else {
-          _debugLog.logError('API Error: $httpStatus', responseBody);
-          throw Exception('API Error: $httpStatus - $responseBody');
-        }
-      } else {
-        // Handle Vonage SDK errors
-        final errorMessage = _vonageService.getErrorMessage(response);
-        print('Vonage Error: $errorMessage');
-        _debugLog.logError('Cellular request failed', errorMessage);
-
-        // Try fallback to regular HTTP if cellular fails
-        print('Attempting fallback to regular HTTP...');
-        return await _makeFallbackPostRequest(urlString, headers, body);
-      }
-    } catch (e) {
-      print('Request error: $e');
-      _debugLog.logError('Request failed', e);
-
-      // Try fallback to regular HTTP on any error
-      try {
-        print('Attempting fallback to regular HTTP...');
-        return await _makeFallbackPostRequest(urlString, headers, body);
-      } catch (fallbackError) {
-        print('Fallback also failed: $fallbackError');
-        rethrow;
-      }
-    }
-  }
-
-  /// Fallback POST request using dart:io HttpClient
-  Future<Map<String, dynamic>> _makeFallbackPostRequest(
-    String urlString,
-    Map<String, String> headers,
-    String body,
-  ) async {
-    final uri = Uri.parse(urlString);
-    final client = HttpClient();
-
-    _debugLog.logInfo('Using fallback HTTP request...');
-
-    try {
-      final request = await client.postUrl(uri);
-
-      // Set headers
-      headers.forEach((key, value) {
-        request.headers.set(key, value);
-      });
-
-      // Write body
-      request.write(body);
-
-      // Get response
-      final response = await request.close();
-      final responseBody = await response.transform(utf8.decoder).join();
-
-      print('Fallback Response status: ${response.statusCode}');
-      print('Fallback Response body: $responseBody');
+      print('Response status: $httpStatus');
+      print('Response body: $responseBody');
 
       // Log response
-      _debugLog.logResponse(urlString, response.statusCode, responseBody);
+      _debugLog.logResponse(
+        urlString,
+        httpStatus,
+        responseBody?.toString() ?? '',
+      );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return json.decode(responseBody);
+      if (httpStatus == 200 || httpStatus == 201) {
+        return responseBody ?? {};
       } else {
-        _debugLog.logError('API Error: ${response.statusCode}', responseBody);
-        throw Exception('API Error: ${response.statusCode} - $responseBody');
+        _debugLog.logError('API Error: $httpStatus', responseBody);
+        throw Exception('API Error: $httpStatus - $responseBody');
       }
-    } catch (e) {
-      print('Fallback request error: $e');
-      _debugLog.logError('Fallback request failed', e);
-      rethrow;
-    } finally {
-      client.close();
     }
+
+    // Cellular SDK returned an error (timeout, no connectivity, etc.).
+    final errorCode = response['error']?.toString() ?? '';
+    final errorMessage = _vonageService.getErrorMessage(response);
+    print('Vonage Error: $errorMessage');
+    _debugLog.logError('Cellular request failed', errorMessage);
+
+    // Surface a timeout distinctly so the UI can show the timeout dialog.
+    if (errorCode == 'sdk_timeout') {
+      throw TimeoutException(errorMessage);
+    }
+    throw Exception(errorMessage);
   }
 
   /// Complete 3-step verification flow
@@ -201,6 +147,11 @@ class ViettelApiService {
           data: verificationResponse,
         );
       }
+    } on TimeoutException {
+      // Let the timeout propagate so the UI shows the dedicated timeout dialog.
+      print('Verification timed out');
+      _debugLog.logError('VERIFICATION TIMED OUT');
+      rethrow;
     } catch (e) {
       print('Error during verification: $e');
       _debugLog.logError('VERIFICATION FAILED', e);
@@ -232,10 +183,14 @@ class ViettelApiService {
         )
         .join('&');
 
-    final jsonResponse = await _makePostRequest('$baseUrl/camara/authorizer', {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'x-correlator': correlator,
-    }, bodyString);
+    final jsonResponse = await _makePostRequest(
+      'https://developers-apis.viettel.vn/camara/authorizer',
+      {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'x-correlator': correlator,
+      },
+      bodyString,
+    );
 
     return AuthorizerResponse.fromJson(jsonResponse);
   }

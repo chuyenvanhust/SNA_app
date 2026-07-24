@@ -1,14 +1,22 @@
 package com.example.appv1
 
 import android.os.Bundle
+import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import com.vonage.clientlibrary.VGCellularRequestClient
 import com.vonage.clientlibrary.VGCellularRequestParameters
 import org.json.JSONObject
+import java.util.concurrent.Callable
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -16,15 +24,67 @@ class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.appv1/vonage"
     private var methodChannel: MethodChannel? = null
 
+    private val TAG = "MainActivity"
+
+    /** Hard timeout for a single cellular request. */
+    private val REQUEST_TIMEOUT_MS = 30_000L
+
+    /** Scope for background cellular requests; cancelled in onDestroy. */
+    private val requestScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
+        // Prevent the Vonage cellular SDK from crashing the whole app when a
+        // network call throws on its internal ConnectivityThread (e.g. ETIMEDOUT).
+        installCellularCrashGuard()
+
         // Initialize Vonage SDK
         try {
             VGCellularRequestClient.initializeSdk(applicationContext)
         } catch (e: Exception) {
             e.printStackTrace()
         }
+    }
+
+    /**
+     * Installs a default uncaught-exception handler that swallows the network
+     * errors thrown by the Vonage cellular SDK on its background
+     * ConnectivityThread. Without this, a failed cellular connection
+     * (e.g. ETIMEDOUT) becomes a FATAL EXCEPTION and kills the process before
+     * the request can time out gracefully. All other crashes are delegated to
+     * the previously registered handler so real bugs still surface.
+     */
+    private fun installCellularCrashGuard() {
+        val previous = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            if (isSuppressibleCellularCrash(thread, throwable)) {
+                Log.w(
+                    TAG,
+                    "Suppressed Vonage cellular crash on thread '${thread.name}': " +
+                        "${throwable.message}. The pending request will time out gracefully."
+                )
+            } else {
+                previous?.uncaughtException(thread, throwable)
+            }
+        }
+    }
+
+    private fun isSuppressibleCellularCrash(thread: Thread, throwable: Throwable): Boolean {
+        val onConnectivityThread = thread.name.contains("ConnectivityThread", ignoreCase = true)
+        val seen = java.util.Collections.newSetFromMap(java.util.IdentityHashMap<Throwable, Boolean>())
+        var cause: Throwable? = throwable
+        while (cause != null && seen.add(cause)) {
+            val isNetworkError = cause is java.io.IOException
+            val fromVonage = cause.stackTrace.any {
+                it.className.startsWith("com.vonage.clientlibrary")
+            }
+            if (isNetworkError && (onConnectivityThread || fromVonage)) {
+                return true
+            }
+            cause = cause.cause
+        }
+        return false
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -186,71 +246,120 @@ class MainActivity : FlutterActivity() {
         debug: Boolean,
         result: MethodChannel.Result
     ) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Use reflection to access the internal postWithDataCellular method
-                val networkManager = VGCellularRequestClient.getInstance()
-                    .javaClass.getDeclaredField("networkManager")
-                networkManager.isAccessible = true
-                val manager = networkManager.get(VGCellularRequestClient.getInstance())
-
-                // Call postWithDataCellular method
-                val postMethod = manager.javaClass.getDeclaredMethod(
-                    "postWithDataCellular",
-                    java.net.URL::class.java,
-                    Map::class.java,
-                    String::class.java
-                )
-                postMethod.isAccessible = true
-
-                val urlObj = java.net.URL(url)
-                val response = postMethod.invoke(
-                    manager,
-                    urlObj,
-                    headers ?: emptyMap<String, String>(),
-                    body
-                ) as JSONObject
-
-                withContext(Dispatchers.Main) {
-                    if (response.optString("error") != "") {
-                        // Error response
-                        val errorMap = mapOf(
-                            "error" to response.optString("error"),
-                            "error_description" to response.optString("error_description")
-                        )
-                        result.success(errorMap)
-                    } else {
-                        // Success response
-                        val httpStatus = response.optInt("http_status")
-                        val responseBody = response.optJSONObject("response_body")
-                        val rawBody = response.optString("response_raw_body")
-
-                        val responseMap = mutableMapOf<String, Any>(
-                            "http_status" to httpStatus
-                        )
-
-                        if (responseBody != null) {
-                            responseMap["response_body"] = jsonObjectToMap(responseBody)
-                        } else if (rawBody.isNotEmpty()) {
-                            responseMap["response_raw_body"] = rawBody
-                        }
-
-                        result.success(responseMap)
-                    }
+        requestScope.launch {
+            val response: JSONObject = try {
+                runWithTimeout(REQUEST_TIMEOUT_MS) {
+                    invokePostWithDataCellular(url, headers, body)
                 }
-            } catch (e: Exception) {
+            } catch (e: TimeoutException) {
+                Log.w(TAG, "Cellular POST timed out after ${REQUEST_TIMEOUT_MS}ms: $url")
                 withContext(Dispatchers.Main) {
-                    result.error(
-                        "CELLULAR_POST_ERROR",
-                        "Failed to make cellular POST request: ${e.message}",
-                        e.toString()
+                    result.success(
+                        mapOf(
+                            "error" to "sdk_timeout",
+                            "error_description" to
+                                "Request timed out after ${REQUEST_TIMEOUT_MS / 1000} seconds"
+                        )
                     )
+                }
+                return@launch
+            } catch (e: Exception) {
+                // Unwrap the reflection/executor wrapper to report the real cause.
+                val cause = (e as? ExecutionException)?.cause ?: e
+                Log.w(TAG, "Cellular POST failed: ${cause.message}")
+                withContext(Dispatchers.Main) {
+                    result.success(
+                        mapOf(
+                            "error" to "sdk_connection_error",
+                            "error_description" to
+                                (cause.message ?: "Failed to make cellular POST request")
+                        )
+                    )
+                }
+                return@launch
+            }
+
+            withContext(Dispatchers.Main) {
+                if (response.optString("error") != "") {
+                    // Error response
+                    val errorMap = mapOf(
+                        "error" to response.optString("error"),
+                        "error_description" to response.optString("error_description")
+                    )
+                    result.success(errorMap)
+                } else {
+                    // Success response
+                    val httpStatus = response.optInt("http_status")
+                    val responseBody = response.optJSONObject("response_body")
+                    val rawBody = response.optString("response_raw_body")
+
+                    val responseMap = mutableMapOf<String, Any>(
+                        "http_status" to httpStatus
+                    )
+
+                    if (responseBody != null) {
+                        responseMap["response_body"] = jsonObjectToMap(responseBody)
+                    } else if (rawBody.isNotEmpty()) {
+                        responseMap["response_raw_body"] = rawBody
+                    }
+
+                    result.success(responseMap)
                 }
             }
         }
     }
 
+    /**
+     * Invokes the Vonage SDK's internal postWithDataCellular via reflection.
+     * This is a blocking call; run it through [runWithTimeout] so a stuck
+     * cellular connection cannot hang the request forever.
+     */
+    private fun invokePostWithDataCellular(
+        url: String,
+        headers: Map<String, String>?,
+        body: String?
+    ): JSONObject {
+        val networkManagerField = VGCellularRequestClient.getInstance()
+            .javaClass.getDeclaredField("networkManager")
+        networkManagerField.isAccessible = true
+        val manager = networkManagerField.get(VGCellularRequestClient.getInstance())
+
+        val postMethod = manager.javaClass.getDeclaredMethod(
+            "postWithDataCellular",
+            java.net.URL::class.java,
+            Map::class.java,
+            String::class.java
+        )
+        postMethod.isAccessible = true
+
+        val urlObj = java.net.URL(url)
+        return postMethod.invoke(
+            manager,
+            urlObj,
+            headers ?: emptyMap<String, String>(),
+            body
+        ) as JSONObject
+    }
+
+    /**
+     * Runs [block] on a dedicated worker thread and aborts with a
+     * [TimeoutException] if it does not finish within [timeoutMs]. Guarantees
+     * control returns to the caller even when the underlying (native) socket
+     * call is stuck waiting on a cellular connection.
+     */
+    private fun <T> runWithTimeout(timeoutMs: Long, block: () -> T): T {
+        val executor = Executors.newSingleThreadExecutor()
+        val future = executor.submit(Callable { block() })
+        return try {
+            future.get(timeoutMs, TimeUnit.MILLISECONDS)
+        } finally {
+            future.cancel(true)
+            executor.shutdownNow()
+        }
+    }
+
     override fun onDestroy() {
+        requestScope.cancel()
         methodChannel?.setMethodCallHandler(null)
         methodChannel = null
         super.onDestroy()

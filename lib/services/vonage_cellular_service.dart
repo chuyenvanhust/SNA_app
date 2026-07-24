@@ -188,6 +188,8 @@ class VonageCellularService {
       switch (error) {
         case 'sdk_no_data_connectivity':
           return 'No cellular data connectivity available';
+        case 'sdk_timeout':
+          return 'Request timed out. Please check your mobile data and try again.';
         case 'sdk_connection_error':
           return 'Failed to establish cellular connection';
         case 'sdk_redirect_error':
