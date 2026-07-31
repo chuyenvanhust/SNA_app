@@ -32,6 +32,9 @@ class MainActivity : FlutterActivity() {
     /** Scope for background cellular requests; cancelled in onDestroy. */
     private val requestScope = CoroutineScope(Dispatchers.IO + SupervisorJob())
 
+    /** Cellular POST client pinned to IPv4; see [CellularIPv4Client]. */
+    private val ipv4Client by lazy { CellularIPv4Client(applicationContext) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -115,13 +118,16 @@ class MainActivity : FlutterActivity() {
                     val headers = call.argument<Map<String, String>>("headers")
                     val body = call.argument<String>("body")
                     val debug = call.argument<Boolean>("debug") ?: false
+                    // Defaults to true: the operator's IPv6 front-end rejects SNA
+                    // requests. Pass false from Dart to A/B against the SDK path.
+                    val forceIpv4 = call.argument<Boolean>("forceIpv4") ?: true
 
                     if (url == null) {
                         result.error("INVALID_ARGUMENT", "URL is required", null)
                         return@setMethodCallHandler
                     }
 
-                    makeCellularPostRequest(url, headers, body, debug, result)
+                    makeCellularPostRequest(url, headers, body, debug, forceIpv4, result)
                 }
                 else -> {
                     result.notImplemented()
@@ -244,12 +250,13 @@ class MainActivity : FlutterActivity() {
         headers: Map<String, String>?,
         body: String?,
         debug: Boolean,
+        forceIpv4: Boolean,
         result: MethodChannel.Result
     ) {
         requestScope.launch {
             val response: JSONObject = try {
                 runWithTimeout(REQUEST_TIMEOUT_MS) {
-                    invokePostWithDataCellular(url, headers, body)
+                    postOverCellular(url, headers, body, forceIpv4)
                 }
             } catch (e: TimeoutException) {
                 Log.w(TAG, "Cellular POST timed out after ${REQUEST_TIMEOUT_MS}ms: $url")
@@ -306,6 +313,33 @@ class MainActivity : FlutterActivity() {
                     result.success(responseMap)
                 }
             }
+        }
+    }
+
+    /**
+     * Sends the POST over mobile data, pinned to IPv4 by default.
+     *
+     * The operator endpoint is dual-stack and its IPv6 front-end answers the SNA
+     * request with `400 INVALID_ARGUMENT`, while the byte-identical request over
+     * IPv4 is accepted. Android prefers IPv6 and the Vonage SDK lets the system
+     * pick, so [CellularIPv4Client] takes over that job. If the carrier hands out
+     * no IPv4 route at all, fall back to the SDK rather than failing outright.
+     */
+    private fun postOverCellular(
+        url: String,
+        headers: Map<String, String>?,
+        body: String?,
+        forceIpv4: Boolean
+    ): JSONObject {
+        val safeHeaders = headers ?: emptyMap()
+        if (!forceIpv4) {
+            return invokePostWithDataCellular(url, safeHeaders, body)
+        }
+        return try {
+            ipv4Client.post(java.net.URL(url), safeHeaders, body)
+        } catch (e: NoIPv4RouteException) {
+            Log.w(TAG, "${e.message} - falling back to the Vonage SDK (IPv6 path may fail)")
+            invokePostWithDataCellular(url, safeHeaders, body)
         }
     }
 

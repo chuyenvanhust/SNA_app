@@ -41,9 +41,12 @@ class ViettelApiService {
 
     print('Vonage Response: $response');
 
-    // Check if request was successful
-    if (_vonageService.isSuccessResponse(response)) {
-      final httpStatus = response['http_status'] as int;
+    // An http_status means the server answered - including 4xx/5xx. Handle it
+    // here so the server's own message survives; the SDK error path below is
+    // only for transport failures (timeout, no connectivity), which carry no
+    // status and would otherwise flatten every API error into 'Unknown error'.
+    final httpStatus = response['http_status'] as int?;
+    if (httpStatus != null) {
       final responseBody = _vonageService.parseResponseBody(response);
 
       print('Response status: $httpStatus');
@@ -56,12 +59,13 @@ class ViettelApiService {
         responseBody?.toString() ?? '',
       );
 
-      if (httpStatus == 200 || httpStatus == 201) {
+      if (httpStatus >= 200 && httpStatus < 300) {
         return responseBody ?? {};
-      } else {
-        _debugLog.logError('API Error: $httpStatus', responseBody);
-        throw Exception('API Error: $httpStatus - $responseBody');
       }
+
+      final detail = _describeApiError(responseBody);
+      _debugLog.logError('API Error $httpStatus: $detail', responseBody);
+      throw Exception('API Error $httpStatus: $detail');
     }
 
     // Cellular SDK returned an error (timeout, no connectivity, etc.).
@@ -75,6 +79,24 @@ class ViettelApiService {
       throw TimeoutException(errorMessage);
     }
     throw Exception(errorMessage);
+  }
+
+  /// Extracts a readable message from an API error body. Viettel answers with
+  /// the CAMARA envelope {"detail": {"code": .., "message": ..}}; anything else
+  /// falls back to the raw body so nothing is lost.
+  String _describeApiError(Map<String, dynamic>? body) {
+    if (body == null) return 'no response body';
+
+    final detail = body['detail'];
+    if (detail is Map) {
+      final parts = [
+        detail['code'],
+        detail['message'],
+      ].where((part) => part != null).join(' - ');
+      if (parts.isNotEmpty) return parts;
+    }
+
+    return body.toString();
   }
 
   /// Complete 3-step verification flow
