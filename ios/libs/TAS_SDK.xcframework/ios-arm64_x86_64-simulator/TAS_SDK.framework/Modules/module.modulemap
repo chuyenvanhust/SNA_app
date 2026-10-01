@@ -1,0 +1,6 @@
+framework module TAS_SDK {
+  umbrella header "TAS_SDK.h"
+  export *
+
+  module * { export * }
+}

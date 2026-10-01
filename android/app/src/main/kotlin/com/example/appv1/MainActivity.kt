@@ -35,6 +35,11 @@ class MainActivity : FlutterActivity() {
     /** Cellular POST client pinned to IPv4; see [CellularIPv4Client]. */
     private val ipv4Client by lazy { CellularIPv4Client(applicationContext) }
 
+    /** Channel for the TAS SDK demo (VTNet Number Verification step 1). */
+    private val TAS_CHANNEL = "com.example.appv1/tas"
+    private var tasChannel: MethodChannel? = null
+    private val tasBridge by lazy { TasAuthBridge(this) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,6 +52,13 @@ class MainActivity : FlutterActivity() {
             VGCellularRequestClient.initializeSdk(applicationContext)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+
+        // Initialize TAS SDK with this Activity (it starts the consent page from it)
+        try {
+            tasBridge.init()
+        } catch (e: Exception) {
+            Log.w(TAG, "TAS SDK init failed: ${e.message}")
         }
     }
 
@@ -128,6 +140,27 @@ class MainActivity : FlutterActivity() {
                     }
 
                     makeCellularPostRequest(url, headers, body, debug, forceIpv4, result)
+                }
+                else -> {
+                    result.notImplemented()
+                }
+            }
+        }
+
+        tasChannel = MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            TAS_CHANNEL
+        )
+
+        tasChannel?.setMethodCallHandler { call, result ->
+            when (call.method) {
+                "authenticate" -> {
+                    val authorizeUrl = call.argument<String>("authorizeUrl")
+                    if (authorizeUrl.isNullOrEmpty()) {
+                        result.error("INVALID_ARGUMENT", "authorizeUrl is required", null)
+                        return@setMethodCallHandler
+                    }
+                    tasBridge.authenticate(authorizeUrl, result)
                 }
                 else -> {
                     result.notImplemented()
@@ -396,6 +429,8 @@ class MainActivity : FlutterActivity() {
         requestScope.cancel()
         methodChannel?.setMethodCallHandler(null)
         methodChannel = null
+        tasChannel?.setMethodCallHandler(null)
+        tasChannel = null
         super.onDestroy()
     }
 }

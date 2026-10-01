@@ -46,4 +46,12 @@ flutter {
 dependencies {
     // Vonage Client Library for cellular network requests
     implementation("com.vonage:client-library:1.0.1")
+    implementation(files("../libs/TAS_SDK.aar"))
+    // A local AAR brings no transitive dependencies; TAS SDK needs these at runtime
+    // (Custom Tabs for the consent page, OkHttp + coroutines for the cellular request).
+    implementation("androidx.browser:browser:1.8.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    // TAS SDK resources (Theme.TAS) extend Theme.Material3.DayNight.NoActionBar
+    implementation("com.google.android.material:material:1.12.0")
 }

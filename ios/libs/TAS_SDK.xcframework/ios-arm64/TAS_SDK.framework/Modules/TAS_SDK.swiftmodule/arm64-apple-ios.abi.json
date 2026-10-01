@@ -1,0 +1,1207 @@
+{
+  "ABIRoot": {
+    "kind": "Root",
+    "name": "TAS_SDK",
+    "printedName": "TAS_SDK",
+    "children": [
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "ExceptionCode",
+        "printedName": "ExceptionCode",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "closeBrowserWithoutResult",
+            "printedName": "closeBrowserWithoutResult",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO25closeBrowserWithoutResultyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO25closeBrowserWithoutResultyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "cannotOpenBrowser",
+            "printedName": "cannotOpenBrowser",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO17cannotOpenBrowseryA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO17cannotOpenBrowseryA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "invalidUrl",
+            "printedName": "invalidUrl",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO10invalidUrlyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO10invalidUrlyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "cellularDisable",
+            "printedName": "cellularDisable",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO15cellularDisableyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO15cellularDisableyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "consentDenied",
+            "printedName": "consentDenied",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO13consentDeniedyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO13consentDeniedyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "sendAuthorizeCodeFailed",
+            "printedName": "sendAuthorizeCodeFailed",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO013sendAuthorizeD6FailedyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO013sendAuthorizeD6FailedyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Var",
+            "name": "unknown",
+            "printedName": "unknown",
+            "children": [
+              {
+                "kind": "TypeFunc",
+                "name": "Function",
+                "printedName": "(TAS_SDK.ExceptionCode.Type) -> TAS_SDK.ExceptionCode",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Metatype",
+                    "printedName": "TAS_SDK.ExceptionCode.Type",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "ExceptionCode",
+                        "printedName": "TAS_SDK.ExceptionCode",
+                        "usr": "s:7TAS_SDK13ExceptionCodeO"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "declKind": "EnumElement",
+            "usr": "s:7TAS_SDK13ExceptionCodeO7unknownyA2CmF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO7unknownyA2CmF",
+            "moduleName": "TAS_SDK"
+          },
+          {
+            "kind": "Function",
+            "name": "==",
+            "printedName": "==(_:_:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ExceptionCode",
+                "printedName": "TAS_SDK.ExceptionCode",
+                "usr": "s:7TAS_SDK13ExceptionCodeO"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "ExceptionCode",
+                "printedName": "TAS_SDK.ExceptionCode",
+                "usr": "s:7TAS_SDK13ExceptionCodeO"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK13ExceptionCodeO2eeoiySbAC_ACtFZ",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO2eeoiySbAC_ACtFZ",
+            "moduleName": "TAS_SDK",
+            "static": true,
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Var",
+            "name": "hashValue",
+            "printedName": "hashValue",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Int",
+                "printedName": "Swift.Int",
+                "usr": "s:Si"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7TAS_SDK13ExceptionCodeO9hashValueSivp",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO9hashValueSivp",
+            "moduleName": "TAS_SDK",
+            "implicit": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Int",
+                    "printedName": "Swift.Int",
+                    "usr": "s:Si"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK13ExceptionCodeO9hashValueSivg",
+                "mangledName": "$s7TAS_SDK13ExceptionCodeO9hashValueSivg",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "hash",
+            "printedName": "hash(into:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Hasher",
+                "printedName": "Swift.Hasher",
+                "paramValueOwnership": "InOut",
+                "usr": "s:s6HasherV"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK13ExceptionCodeO4hash4intoys6HasherVz_tF",
+            "mangledName": "$s7TAS_SDK13ExceptionCodeO4hash4intoys6HasherVz_tF",
+            "moduleName": "TAS_SDK",
+            "implicit": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Enum",
+        "usr": "s:7TAS_SDK13ExceptionCodeO",
+        "mangledName": "$s7TAS_SDK13ExceptionCodeO",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Equatable",
+            "printedName": "Equatable",
+            "usr": "s:SQ",
+            "mangledName": "$sSQ"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Hashable",
+            "printedName": "Hashable",
+            "usr": "s:SH",
+            "mangledName": "$sSH"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TasException",
+        "printedName": "TasException",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "code",
+            "printedName": "code",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ExceptionCode",
+                "printedName": "TAS_SDK.ExceptionCode",
+                "usr": "s:7TAS_SDK13ExceptionCodeO"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7TAS_SDK12TasExceptionC4codeAA0D4CodeOvp",
+            "mangledName": "$s7TAS_SDK12TasExceptionC4codeAA0D4CodeOvp",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ExceptionCode",
+                    "printedName": "TAS_SDK.ExceptionCode",
+                    "usr": "s:7TAS_SDK13ExceptionCodeO"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK12TasExceptionC4codeAA0D4CodeOvg",
+                "mangledName": "$s7TAS_SDK12TasExceptionC4codeAA0D4CodeOvg",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "message",
+            "printedName": "message",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7TAS_SDK12TasExceptionC7messageSSvp",
+            "mangledName": "$s7TAS_SDK12TasExceptionC7messageSSvp",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK12TasExceptionC7messageSSvg",
+                "mangledName": "$s7TAS_SDK12TasExceptionC7messageSSvg",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:7TAS_SDK12TasExceptionC",
+        "mangledName": "$s7TAS_SDK12TasExceptionC",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "hasMissingDesignatedInitializers": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AuthCallback",
+        "printedName": "AuthCallback",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(onSuccess:onError:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "AuthCallback",
+                "printedName": "TAS_SDK.AuthCallback",
+                "usr": "s:7TAS_SDK12AuthCallbackC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(() -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "() -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "((TAS_SDK.TasException) -> ())?",
+                "children": [
+                  {
+                    "kind": "TypeFunc",
+                    "name": "Function",
+                    "printedName": "(TAS_SDK.TasException) -> ()",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "Void",
+                        "printedName": "()"
+                      },
+                      {
+                        "kind": "TypeNominal",
+                        "name": "TasException",
+                        "printedName": "TAS_SDK.TasException",
+                        "usr": "s:7TAS_SDK12TasExceptionC"
+                      }
+                    ]
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:7TAS_SDK12AuthCallbackC9onSuccess0E5ErrorACyycSg_yAA12TasExceptionCcSgtcfc",
+            "mangledName": "$s7TAS_SDK12AuthCallbackC9onSuccess0E5ErrorACyycSg_yAA12TasExceptionCcSgtcfc",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:7TAS_SDK12AuthCallbackC",
+        "mangledName": "$s7TAS_SDK12AuthCallbackC",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "AuthenticationServices",
+        "printedName": "AuthenticationServices",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "AuthHandler",
+        "printedName": "AuthHandler",
+        "children": [
+          {
+            "kind": "Function",
+            "name": "getAuthorizeUrl",
+            "printedName": "getAuthorizeUrl()",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK11AuthHandlerP15getAuthorizeUrlSSyF",
+            "mangledName": "$s7TAS_SDK11AuthHandlerP15getAuthorizeUrlSSyF",
+            "moduleName": "TAS_SDK",
+            "genericSig": "<τ_0_0 where τ_0_0 : TAS_SDK.AuthHandler>",
+            "sugared_genericSig": "<Self where Self : TAS_SDK.AuthHandler>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "sendAuthorizeCode",
+            "printedName": "sendAuthorizeCode(code:metaData:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "String",
+                "printedName": "Swift.String",
+                "usr": "s:SS"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Dictionary",
+                "printedName": "[Swift.String : Any]",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "String",
+                    "printedName": "Swift.String",
+                    "usr": "s:SS"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ProtocolComposition",
+                    "printedName": "Any"
+                  }
+                ],
+                "usr": "s:SD"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK11AuthHandlerP17sendAuthorizeCode4code8metaDataSbSS_SDySSypGtYaF",
+            "mangledName": "$s7TAS_SDK11AuthHandlerP17sendAuthorizeCode4code8metaDataSbSS_SDySSypGtYaF",
+            "moduleName": "TAS_SDK",
+            "genericSig": "<τ_0_0 where τ_0_0 : TAS_SDK.AuthHandler>",
+            "sugared_genericSig": "<Self where Self : TAS_SDK.AuthHandler>",
+            "protocolReq": true,
+            "reqNewWitnessTableEntry": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Protocol",
+        "usr": "s:7TAS_SDK11AuthHandlerP",
+        "mangledName": "$s7TAS_SDK11AuthHandlerP",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TasConfig",
+        "printedName": "TasConfig",
+        "children": [
+          {
+            "kind": "Constructor",
+            "name": "init",
+            "printedName": "init(debug:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TasConfig",
+                "printedName": "TAS_SDK.TasConfig",
+                "usr": "s:7TAS_SDK9TasConfigC"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "hasDefaultArg": true,
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Constructor",
+            "usr": "s:7TAS_SDK9TasConfigC5debugACSb_tcfc",
+            "mangledName": "$s7TAS_SDK9TasConfigC5debugACSb_tcfc",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "init_kind": "Designated"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:7TAS_SDK9TasConfigC",
+        "mangledName": "$s7TAS_SDK9TasConfigC",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Network",
+        "printedName": "Network",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
+        "name": "UIKit",
+        "printedName": "UIKit",
+        "declKind": "Import",
+        "moduleName": "TAS_SDK"
+      },
+      {
+        "kind": "TypeDecl",
+        "name": "TasSDK",
+        "printedName": "TasSDK",
+        "children": [
+          {
+            "kind": "Var",
+            "name": "shared",
+            "printedName": "shared",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "TasSDK",
+                "printedName": "TAS_SDK.TasSDK",
+                "usr": "s:7TAS_SDK03TasB0C"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7TAS_SDK03TasB0C6sharedACvpZ",
+            "mangledName": "$s7TAS_SDK03TasB0C6sharedACvpZ",
+            "moduleName": "TAS_SDK",
+            "static": true,
+            "declAttributes": [
+              "HasInitialValue",
+              "Final",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "isLet": true,
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "TasSDK",
+                    "printedName": "TAS_SDK.TasSDK",
+                    "usr": "s:7TAS_SDK03TasB0C"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK03TasB0C6sharedACvgZ",
+                "mangledName": "$s7TAS_SDK03TasB0C6sharedACvgZ",
+                "moduleName": "TAS_SDK",
+                "static": true,
+                "implicit": true,
+                "declAttributes": [
+                  "Final"
+                ],
+                "accessorKind": "get"
+              }
+            ]
+          },
+          {
+            "kind": "Var",
+            "name": "authHandler",
+            "printedName": "authHandler",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "ImplicitlyUnwrappedOptional",
+                "printedName": "(any TAS_SDK.AuthHandler)?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "AuthHandler",
+                    "printedName": "any TAS_SDK.AuthHandler",
+                    "usr": "s:7TAS_SDK11AuthHandlerP"
+                  }
+                ],
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvp",
+            "mangledName": "$s7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvp",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ImplicitlyUnwrappedOptional",
+                    "printedName": "(any TAS_SDK.AuthHandler)?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "AuthHandler",
+                        "printedName": "any TAS_SDK.AuthHandler",
+                        "usr": "s:7TAS_SDK11AuthHandlerP"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvg",
+                "mangledName": "$s7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvg",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "ImplicitlyUnwrappedOptional",
+                    "printedName": "(any TAS_SDK.AuthHandler)?",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "AuthHandler",
+                        "printedName": "any TAS_SDK.AuthHandler",
+                        "usr": "s:7TAS_SDK11AuthHandlerP"
+                      }
+                    ],
+                    "usr": "s:Sq"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvs",
+                "mangledName": "$s7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvs",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvM",
+                "mangledName": "$s7TAS_SDK03TasB0C11authHandlerAA04AuthE0_pSgvM",
+                "moduleName": "TAS_SDK",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
+            "kind": "Function",
+            "name": "initSDK",
+            "printedName": "initSDK(config:authHandler:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "TAS_SDK.TasConfig?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "TasConfig",
+                    "printedName": "TAS_SDK.TasConfig",
+                    "usr": "s:7TAS_SDK9TasConfigC"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "(any TAS_SDK.AuthHandler)?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "AuthHandler",
+                    "printedName": "any TAS_SDK.AuthHandler",
+                    "usr": "s:7TAS_SDK11AuthHandlerP"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK03TasB0C04initB06config11authHandleryAA0C6ConfigCSg_AA04AuthG0_pSgtF",
+            "mangledName": "$s7TAS_SDK03TasB0C04initB06config11authHandleryAA0C6ConfigCSg_AA04AuthG0_pSgtF",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "authenticate",
+            "printedName": "authenticate(callback:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "AuthCallback",
+                "printedName": "TAS_SDK.AuthCallback",
+                "usr": "s:7TAS_SDK12AuthCallbackC"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "s:7TAS_SDK03TasB0C12authenticate8callbackyAA12AuthCallbackC_tKF",
+            "mangledName": "$s7TAS_SDK03TasB0C12authenticate8callbackyAA12AuthCallbackC_tKF",
+            "moduleName": "TAS_SDK",
+            "declAttributes": [
+              "AccessControl"
+            ],
+            "throwing": true,
+            "funcSelfKind": "NonMutating"
+          }
+        ],
+        "declKind": "Class",
+        "usr": "s:7TAS_SDK03TasB0C",
+        "mangledName": "$s7TAS_SDK03TasB0C",
+        "moduleName": "TAS_SDK",
+        "declAttributes": [
+          "AccessControl"
+        ],
+        "hasMissingDesignatedInitializers": true,
+        "conformances": [
+          {
+            "kind": "Conformance",
+            "name": "Copyable",
+            "printedName": "Copyable",
+            "usr": "s:s8CopyableP",
+            "mangledName": "$ss8CopyableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "Escapable",
+            "printedName": "Escapable",
+            "usr": "s:s9EscapableP",
+            "mangledName": "$ss9EscapableP"
+          }
+        ]
+      }
+    ],
+    "json_format_version": 8
+  },
+  "ConstValues": [
+    {
+      "filePath": "\/Volumes\/D\/code\/ios\/TAS_SDK\/TAS_SDK\/model\/TasException.swift",
+      "kind": "StringLiteral",
+      "offset": 246,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Volumes\/D\/code\/ios\/TAS_SDK\/TAS_SDK\/model\/TasConfig.swift",
+      "kind": "BooleanLiteral",
+      "offset": 175,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Volumes\/D\/code\/ios\/TAS_SDK\/TAS_SDK\/util\/NetworkMonitor.swift",
+      "kind": "BooleanLiteral",
+      "offset": 211,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Volumes\/D\/code\/ios\/TAS_SDK\/TAS_SDK\/util\/NetworkMonitor.swift",
+      "kind": "StringLiteral",
+      "offset": 304,
+      "length": 17,
+      "value": "\"Network Monitor\""
+    }
+  ]
+}

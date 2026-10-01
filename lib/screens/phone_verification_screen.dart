@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../services/viettel_api_service.dart';
+import '../services/vtnet_number_verification_service.dart';
 import '../widgets/debug_terminal.dart';
 import 'welcome_screen.dart';
 
@@ -19,6 +20,8 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final ViettelApiService _apiService = ViettelApiService();
+  final VtnetNumberVerificationService _tasDemoService =
+      VtnetNumberVerificationService();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -123,6 +126,64 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
 
       if (mounted) {
         _showTimeoutDialog();
+      }
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (mounted) {
+        _showErrorDialog('An error occurred: ${e.toString()}');
+      }
+    }
+  }
+
+  /// DEMO: VTNet Number Verification with TAS SDK (step 1 via TAS SDK,
+  /// steps 2-3 token + device-phone-number). No phone number input required.
+  Future<void> _handleSignInWithTasDemo() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // Longer than the SNA timeout: the consent page may wait for the user.
+      // The SDK also gives no callback when the Gateway answers without a
+      // redirect, so this timeout is the only way out in that case.
+      final result = await _tasDemoService
+          .verify(enteredPhoneNumber: _phoneController.text)
+          .timeout(const Duration(seconds: 60));
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (result.success && result.devicePhoneNumber != null) {
+        if (mounted) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => WelcomeScreen(
+                phoneNumber: VtnetNumberVerificationService.toLocalNumber(
+                  result.devicePhoneNumber!,
+                ),
+              ),
+            ),
+          );
+        }
+      } else {
+        if (mounted) {
+          _showErrorDialog(result.message);
+        }
+      }
+    } on TimeoutException {
+      setState(() {
+        _isLoading = false;
+      });
+
+      if (mounted) {
+        _showErrorDialog(
+          'TAS demo timed out after 60 seconds. The TAS SDK returned no result - '
+          'check logcat (TasAuthBridge / TAS SDK logs) for the authorize redirect trace.',
+        );
       }
     } catch (e) {
       setState(() {
@@ -531,6 +592,37 @@ class _PhoneVerificationScreenState extends State<PhoneVerificationScreen> {
                       icon: const Icon(Icons.network_cell, size: 24),
                       label: const Text(
                         'Sign In with SNA',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Sign In with TAS demo Button (VTNet Number Verification)
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: OutlinedButton.icon(
+                      onPressed: _isLoading ? null : _handleSignInWithTasDemo,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: const Color(0xFFE60012),
+                        side: BorderSide(
+                          color: _isLoading
+                              ? Colors.grey.shade300
+                              : const Color(0xFFE60012),
+                          width: 2,
+                        ),
+                        disabledForegroundColor: Colors.grey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      icon: const Icon(Icons.verified_user, size: 24),
+                      label: const Text(
+                        'Sign In with TAS demo',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

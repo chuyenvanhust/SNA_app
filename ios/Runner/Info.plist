@@ -45,5 +45,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<!-- TAS SDK: scheme of redirect_uri https://google.com, the same redirect_uri
+	     as Android (VtnetNumberVerificationService.redirectUri) -->
+	<key>TasScheme</key>
+	<string>https</string>
 </dict>
 </plist>

@@ -1,0 +1,53 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.1 effective-5.10 (swiftlang-6.1.0.110.21 clang-1700.0.13.3)
+// swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name TAS_SDK
+// swift-module-flags-ignorable:  -interface-compiler-version 6.1
+import AuthenticationServices
+import Foundation
+import Network
+import Swift
+@_exported import TAS_SDK
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public enum ExceptionCode {
+  case closeBrowserWithoutResult
+  case cannotOpenBrowser
+  case invalidUrl
+  case cellularDisable
+  case consentDenied
+  case sendAuthorizeCodeFailed
+  case unknown
+  public static func == (a: TAS_SDK.ExceptionCode, b: TAS_SDK.ExceptionCode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class TasException {
+  final public let code: TAS_SDK.ExceptionCode
+  final public let message: Swift.String
+  @objc deinit
+}
+public class AuthCallback {
+  public init(onSuccess: (() -> Swift.Void)? = nil, onError: ((TAS_SDK.TasException) -> Swift.Void)? = nil)
+  @objc deinit
+}
+public protocol AuthHandler {
+  func getAuthorizeUrl() -> Swift.String
+  func sendAuthorizeCode(code: Swift.String, metaData: [Swift.String : Any]) async -> Swift.Bool
+}
+public class TasConfig {
+  public init(debug: Swift.Bool = false)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class TasSDK {
+  public static let shared: TAS_SDK.TasSDK
+  public var authHandler: (any TAS_SDK.AuthHandler)!
+  public func initSDK(config: TAS_SDK.TasConfig? = nil, authHandler: (any TAS_SDK.AuthHandler)? = nil)
+  public func authenticate(callback: TAS_SDK.AuthCallback) throws
+  @objc deinit
+}
+extension TAS_SDK.ExceptionCode : Swift.Equatable {}
+extension TAS_SDK.ExceptionCode : Swift.Hashable {}
